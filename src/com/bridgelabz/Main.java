@@ -8,122 +8,126 @@ public class Main {
 
 	static HashMap<String, AddressBook> allAddressbook = new HashMap<>();
 
-	private static int mainMenu() {
-		System.out.println("\n" + "************* Main Menu *************");
-		System.out.println("1.Add New AdressBook" + "     " + "2.AddContacts");
-		System.out.println("3.Edit Contact Details" + "     " + "4.Delete contact");
-		System.out.println("5.Show AdressBook details");
-		int choice = sc.nextInt();
-
-		return choice;
-	}
-
 	public static void main(String[] args) {
 		boolean flag = true;
 		while (flag) {
-			isEmptyAllAdressbook();
-			int choice = mainMenu();
+			System.out.println("\n" + "************* Main Menu *************");
+			System.out.println("1.Add New AddressBook" + "     " + "2.Show AddressBook details");
+			System.out.println("3.Delete Addressbook" + "     " + " 4.Edit Addressbook");
+			System.out.println("9. Exit");
+
+			int choice = sc.nextInt();
 
 			switch (choice) {
-			case 1:
-				createAddressbook();
-				break;
-
-			case 2:
-				System.out.println("Enter the name of the Adressbook in which you want to add contacts : ");
-				String addressBookName = sc.next();
-				
-				if (checkAdressbookPresent(addressBookName)) {
-					System.out.println("How many contacts do you want to add in " + addressBookName + " : ");
-					int num = sc.nextInt();
-					if (num <= 0)
-						System.out.println("Invalid Input!!!");
-					else {
-						for (int i = 0; i < num; i++) {
-							addContact(addressBookName);
-						}
-					}
-				} else 
-					addresssbookNotPresent(addressBookName);
-				break;
-
-			case 3:
-				System.out.println("Enter the name of the Adressbook in which you want to edit contact : ");
-				String addressBookName1 = sc.next();
-				if (checkAdressbookPresent(addressBookName1))
-					editContact(addressBookName1);
-				else 
-					addresssbookNotPresent(addressBookName1);
-				break;
-
-			case 4:
-				System.out.println("Enter the name of the Adressbook in which you want to delete contact : ");
-				String addressBookName2 = sc.next();
-				if (checkAdressbookPresent(addressBookName2))
-					deleteContact(addressBookName2);
-				else 
-					addresssbookNotPresent(addressBookName2);
-				break;
-
-			case 5:
-				System.out.println("Enter the name of the Adressbook which you want to show: ");
-				String addressBookName3 = sc.next();
-				if (checkAdressbookPresent(addressBookName3))
-					System.out.println(allAddressbook.get(addressBookName3));
-				else 
-					addresssbookNotPresent(addressBookName3);
-				break;
-
-			default:
-				System.out.println("Invalid input.");
-				break;
+				case 1:
+					addAdressbook();
+					break;
+				case 2:
+					printAdressbook();
+					break;
+				case 3:
+					deleteAddressbook();
+					break;
+				case 4:
+					editAdressbook();
+					break;
+				case 9:
+					flag = false;
+					System.out.println("Successfully exited");
+					break;
+	
+				default:
+					System.out.println("INVALID INPUT !!!!!");
+					break;
 			}
 		}
-
 	}
 
-	private static void addresssbookNotPresent(String addresssBookName) {
-		System.out.println("No AdressBook present with name " + addresssBookName
-				+ ". Below Adressbooks present currently: ");
-		System.out.println(allAddressbook.keySet());
-		
-	}
-
-	private static void isEmptyAllAdressbook() {
+	private static void editAdressbook() {
 		if (allAddressbook.size() == 0) {
-			System.out.println("There is no AdressBook present till now. Please add an Adressbook now to start.");
-			createAddressbook();
+			System.out.println("There is no AdressBook present till now. Please add an Adressbook first.");
+			return;
+		}
+		System.out.println("Enter the name of the AdressBook which you want to edit : ");
+		String adressBookName = sc.next();
+		if (allAddressbook.containsKey(adressBookName)) {
+			boolean flag = true;
+			while (flag) {
+				System.out.println("\n" + "************* AddressBook Menu *************");
+				System.out.println("1.Add contact" + "        " + "2.Edit Contact");
+				System.out.println("3.Delete contact" + "     " + "4. Show details of a particular contact");
+				System.out.println("5. Show all contacts of " + adressBookName);
+				System.out.println("9. Exit");
+
+				int choice = sc.nextInt();
+				switch (choice) {
+					case 1:
+						System.out.println("How many Contacts do you want to add : ");
+						int numOfContacts = sc.nextInt();
+						if (numOfContacts <= 0)
+							System.out.println("INVALID INPUT !!!");
+						else
+							for (int i = 0; i < numOfContacts; i++) {
+								allAddressbook.get(adressBookName).addContactDetails();
+							}
+						break;
+	
+					case 2:
+						allAddressbook.get(adressBookName).editContactDetails();
+						break;
+	
+					case 3:
+						allAddressbook.get(adressBookName).deleteContact();
+						break;
+					case 4:
+						allAddressbook.get(adressBookName).showContact();
+						break;
+					case 5:
+						System.out.println(allAddressbook.get(adressBookName));
+						break;
+					case 9:
+						flag = false;
+						System.out.println("Successfully exited from " + adressBookName);
+						break;
+	
+					default:
+						System.out.println("INVALID INPUT !!!!");
+						break;
+				}
+			}
+
+		} else {
+			System.out.println("SORRY!!! Adressbook NOT FOUND with the name " + adressBookName);
+			System.out.println("Currently present AdressBooks are :  " + allAddressbook.keySet());
 		}
 	}
 
-	private static void addContact(String bookName) {
-		AddressBook addressBook = allAddressbook.get(bookName);
-		addressBook.addContactDetails();
-	}
-
-	private static void editContact(String bookName) {
-		AddressBook addressBook = allAddressbook.get(bookName);
-		addressBook.editContactDetails();
-	}
-
-	private static void deleteContact(String bookName) {
-		AddressBook addressBook = allAddressbook.get(bookName);
-		addressBook.deleteContact();
-	}
-
-	private static void createAddressbook() {
-		System.out.println("Enter the name of the AdressBook : ");
-		String name = sc.next();
-		allAddressbook.put(name, new AddressBook());
-		System.out.println("Adressbook created successfully.");
-	}
-
-	private static boolean checkAdressbookPresent(String name) {
-		for (int i = 0; i < allAddressbook.size(); i++) {
-			if (allAddressbook.containsKey(name))
-				return true;
+	private static void deleteAddressbook() {
+		if (allAddressbook.size() == 0) {
+			System.out.println("There is no AdressBook present till now. Please add an Adressbook first.");
+			return;
 		}
-		return false;
+
+		System.out.println("Enter the name of the Adressbook you want to delete : ");
+		String adressbookName = sc.next();
+
+		if (allAddressbook.containsKey(adressbookName)) {
+			allAddressbook.remove(adressbookName);
+			System.out.println("AdressBook Deleted Successfully!!!");
+		} else
+			System.out.println("Adressbook NOT FOUND with the name " + adressbookName);
+		System.out.println("Currently present AdressBooks are :  " + allAddressbook.keySet());
+
+	}
+
+	private static void printAdressbook() {
+		System.out.println(allAddressbook);
+	}
+
+	private static void addAdressbook() {
+		System.out.println("Enter the name of the Adressbook:");
+		String adressbookName = sc.next();
+		allAddressbook.put(adressbookName, new AddressBook());
 	}
 
 }
