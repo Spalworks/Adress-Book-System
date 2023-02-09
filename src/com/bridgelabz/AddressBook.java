@@ -12,6 +12,7 @@ public class AddressBook {
 
 	/* Creating contact with this method */
 	void addContactDetails() {
+		System.out.println("Creating new contact:- \n");
 		String firstName = null;
 		String lastName = null;
 
