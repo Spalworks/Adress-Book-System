@@ -51,7 +51,10 @@ public class AddressBook {
 				+ allContacts.size());
 	}
 
-	/* Checking if given First name & Last name is already present in the arraylist or not */
+	/*
+	 * Checking if given First name & Last name is already present in the arraylist
+	 * or not
+	 */
 	boolean checkContactExist(String firstName, String lastName) {
 		for (Contact contact : allContacts) {
 			if (contact.getFirstName().equals(firstName) && contact.getLastName().equals(lastName)) {
@@ -167,6 +170,13 @@ public class AddressBook {
 		}
 		System.out.println("Contact NOT FOUND!!! Check the First name and try again.");
 
+	}
+/* Showing the contact details in sorted order
+ * Sorted by FirstName alphabetically
+ */
+	public void showContactSortedAlphabetically() {
+		allContacts.stream().sorted((contact1, contact2) -> contact1.getFirstName().compareToIgnoreCase(contact2.getFirstName()))
+				.forEach(contact -> System.out.println(contact));
 	}
 
 	@Override
